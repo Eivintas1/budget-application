@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+const API = "http://127.0.0.1:8000";
+
+export default function App() {
+  const [transactions, setTransactions] = useState([]);
+
+  async function loadTransactions() {
+    const response = await fetch(`${API}/transactions`);
+    const data = await response.json();
+    setTransactions(data);
+  }
+
+  useEffect(() => {
+    loadTransactions();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div style={{padding: 20}}>
+      <h1>Budget tracker</h1>
 
-export default App
+      <button onClick={loadTransactions}>Reload</button>
+
+      {transactions.length === 0 ? (
+        <p>No transactions found</p>
+      ) : (
+        <ul>
+        {transactions.map((transaction) => (
+          <li key={transaction.id}>
+            {transaction.date} - {transaction.type} - {transaction.catagory} - ${transaction.amount} - {transaction.description}
+          </li>
+        ))}
+        </ul>
+      )}
+    </div>
+  );
+}
