@@ -19,6 +19,27 @@ const [description, setDescription] = useState('');
     setTransactions(data);
   }
 
+  async function deleteTransaction(id) {
+    try {
+      const response = await fetch(`${API}/transactions/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        alert(err.detail || "Delete failed");
+        return;
+      }
+
+      // update UI immediately
+      setTransactions((prev) =>
+        prev.filter((t) => t.id !== id)
+      );
+    } catch (e) {
+      alert("Delete failed. Backend may not be running.");
+    }
+  }
+
   async function addTransaction() {
   const newTx = {
     date,
@@ -26,7 +47,7 @@ const [description, setDescription] = useState('');
     category,
     description,
     amount: Number(amount),
-  };
+  }
 
   const response = await fetch(`${API}/transactions`, {
     method: 'POST',
@@ -93,6 +114,7 @@ const [description, setDescription] = useState('');
 
       <button onClick={addTransaction}>Add</button>
       <button onClick={loadTransactions}>Reload</button>
+      
     </div>
 
     <hr style={{ margin: "20px 0" }} />
@@ -106,6 +128,9 @@ const [description, setDescription] = useState('');
           <li key={transaction.id}>
             {transaction.date} - {transaction.type} - {transaction.category} - €
             {transaction.amount} - {transaction.description}
+            <button onClick={() => deleteTransaction(transaction.id)} style={{ marginLeft: 10 }}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>
