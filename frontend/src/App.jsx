@@ -82,10 +82,26 @@ const [description, setDescription] = useState('');
   useEffect(() => {
     loadTransactions();
   }, []);
+  const totalIncome = transactions
+  .filter((t) => t.type === "Income")
+  .reduce((sum, t) => sum + t.amount, 0);
+
+const totalExpense = transactions
+  .filter((t) => t.type === "Expense")
+  .reduce((sum, t) => sum + t.amount, 0);
+
+const balance = totalIncome - totalExpense;
+
 
   return (
   <div style={{ padding: 20, maxWidth: 700, margin: "0 auto" }}>
     <h1>Budget tracker</h1>
+    <p>
+      <strong>Income:</strong> €{totalIncome.toFixed(2)} |{" "}
+      <strong>Expense:</strong> €{totalExpense.toFixed(2)} |{" "}
+      <strong>Balance:</strong> €{balance.toFixed(2)}
+    </p>
+
 
     <h2>Add transaction</h2>
 
