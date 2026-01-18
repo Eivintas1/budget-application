@@ -41,35 +41,42 @@ const [description, setDescription] = useState('');
   }
 
   async function addTransaction() {
+  // minimal frontend validation
+  if (!date || !category || !description || !amount) {
+    alert("Please fill in all fields");
+    return;
+  }
+
   const newTx = {
     date,
     type,
     category,
     description,
     amount: Number(amount),
-  }
+  };
 
   const response = await fetch(`${API}/transactions`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newTx),
   });
 
   if (!response.ok) {
     const err = await response.json();
-    alert(err.detail || 'Failed to add transaction');
+    alert(err.detail || "Failed to add transaction");
     return;
   }
 
-  //clear inputs
-  setDate('');
-  setType('Income');
-  setCategory('');
-  setAmount('');
-  setDescription('');
+  // clear inputs
+  setDate("");
+  setType("Income");
+  setCategory("");
+  setDescription("");
+  setAmount("");
 
   loadTransactions();
 }
+
   
 
   useEffect(() => {

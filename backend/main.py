@@ -1,7 +1,9 @@
+from wsgiref.validate import validator
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, validator
 from typing import Literal
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime
 
 app = FastAPI()
 app.add_middleware(
@@ -19,11 +21,19 @@ app.add_middleware(
 
 # What the user SENDS (no id)
 class TransactionIn(BaseModel):
-    date: str
+    date: str = Field(..., min_length=1)
     type: Literal["Income", "Expense"]
-    category: str
-    description: str
-    amount: float
+    category: str = Field(..., min_length=1)
+    description: str = Field(..., min_length=1)
+    amount: float = Field(..., gt=0)
+
+    @validator("date")
+    def validate_date(cls, value):
+        try:
+            datetime.strptime(value, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError("Date must be in YYYY-MM-DD format")
+        return value
 
 # What the server RETURNS (has id)
 class TransactionOut(TransactionIn):
@@ -39,9 +49,6 @@ def health_check():
 @app.post("/transactions")
 def add_transaction(tx: TransactionIn):
     global next_id
-
-    if tx.amount <= 0:
-        raise HTTPException(status_code=400, detail="Amount must be > 0")
 
     new_tx = TransactionOut(id=next_id, **tx.model_dump())
     next_id += 1
