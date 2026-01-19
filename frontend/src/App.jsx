@@ -75,14 +75,14 @@ const [description, setDescription] = useState('');
   setAmount("");
 
   loadTransactions();
-}
 
-  
+
+}
 
   useEffect(() => {
     loadTransactions();
   }, []);
-  const totalIncome = transactions
+const totalIncome = transactions
   .filter((t) => t.type === "Income")
   .reduce((sum, t) => sum + t.amount, 0);
 
@@ -92,12 +92,17 @@ const totalExpense = transactions
 
 const balance = totalIncome - totalExpense;
 
+const sortedTransactions = [...transactions].sort(
+  (a, b) => b.date.localeCompare(a.date)
+);
+
 const expenseByCategory = transactions
   .filter((t) => t.type === "Expense")
   .reduce((acc, t) => {
     const key = t.category || "Uncategorised";
     acc[key] = (acc[key] || 0) + t.amount;
     return acc;
+
   }, {});
 
 
@@ -167,14 +172,39 @@ const expenseByCategory = transactions
       <p>No transactions found</p>
     ) : (
       <ul>
-        {transactions.map((transaction) => (
-          <li key={transaction.id}>
-            {transaction.date} - {transaction.type} - {transaction.category} - €
-            {transaction.amount} - {transaction.description}
-            <button onClick={() => deleteTransaction(transaction.id)} style={{ marginLeft: 10 }}>
-              Delete
-            </button>
-          </li>
+        {sortedTransactions.map((transaction) => (
+
+          <li
+  key={transaction.id}
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    gap: 12,
+    padding: "8px 10px",
+    marginBottom: 8,
+    border: "1px solid #ddd",
+    borderRadius: 8,
+    background: transaction.type === "Income" ? "#2f7a2f" : "#702121",
+  }}
+>
+  <div>
+    <strong>{transaction.type}</strong> — {transaction.date}<br />
+    {transaction.category} • {transaction.description}
+  </div>
+
+  <div style={{ textAlign: "right" }}>
+    <strong>€{transaction.amount.toFixed(2)}</strong>
+    <div>
+      <button
+        type="button"
+        onClick={() => deleteTransaction(transaction.id)}
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</li>
+
         ))}
       </ul>
     )}
