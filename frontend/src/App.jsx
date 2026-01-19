@@ -92,6 +92,14 @@ const totalExpense = transactions
 
 const balance = totalIncome - totalExpense;
 
+const expenseByCategory = transactions
+  .filter((t) => t.type === "Expense")
+  .reduce((acc, t) => {
+    const key = t.category || "Uncategorised";
+    acc[key] = (acc[key] || 0) + t.amount;
+    return acc;
+  }, {});
+
 
   return (
   <div style={{ padding: 20, maxWidth: 700, margin: "0 auto" }}>
@@ -101,6 +109,18 @@ const balance = totalIncome - totalExpense;
       <strong>Expense:</strong> €{totalExpense.toFixed(2)} |{" "}
       <strong>Balance:</strong> €{balance.toFixed(2)}
     </p>
+    <h2>Spending by category</h2>
+{Object.keys(expenseByCategory).length === 0 ? (
+  <p>No expense data yet</p>
+) : (
+  <ul>
+    {Object.entries(expenseByCategory).map(([cat, total]) => (
+      <li key={cat}>
+        {cat}: €{total.toFixed(2)}
+      </li>
+    ))}
+  </ul>
+)}
 
 
     <h2>Add transaction</h2>

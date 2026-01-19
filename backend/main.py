@@ -1,4 +1,3 @@
-from wsgiref.validate import validator
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field, validator
 from typing import Literal
