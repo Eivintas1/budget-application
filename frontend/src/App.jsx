@@ -12,6 +12,8 @@ const [type, setType] = useState('Income');
 const [category, setCategory] = useState('');
 const [amount, setAmount] = useState('');
 const [description, setDescription] = useState('');
+const [filterType, setFilterType] = useState("All");
+
 
   async function loadTransactions() {
     const response = await fetch(`${API}/transactions`);
@@ -92,9 +94,15 @@ const totalExpense = transactions
 
 const balance = totalIncome - totalExpense;
 
-const sortedTransactions = [...transactions].sort(
+const filteredTransactions = transactions.filter((t) => {
+  if (filterType === "All") return true;
+  return t.type === filterType;
+});
+
+const sortedTransactions = [...filteredTransactions].sort(
   (a, b) => b.date.localeCompare(a.date)
 );
+
 
 const expenseByCategory = transactions
   .filter((t) => t.type === "Expense")
@@ -115,6 +123,7 @@ const expenseByCategory = transactions
       <strong>Balance:</strong> €{balance.toFixed(2)}
     </p>
     <h2>Spending by category</h2>
+    
 {Object.keys(expenseByCategory).length === 0 ? (
   <p>No expense data yet</p>
 ) : (
@@ -168,6 +177,12 @@ const expenseByCategory = transactions
     <hr style={{ margin: "20px 0" }} />
 
     <h2>Transactions</h2>
+    <div style={{ display: "flex", gap: 8, margin: "12px 0" }}>
+  <button type="button" onClick={() => setFilterType("All")}>All</button>
+  <button type="button" onClick={() => setFilterType("Income")}>Income</button>
+  <button type="button" onClick={() => setFilterType("Expense")}>Expense</button>
+</div>
+
     {transactions.length === 0 ? (
       <p>No transactions found</p>
     ) : (
@@ -191,6 +206,7 @@ const expenseByCategory = transactions
     <strong>{transaction.type}</strong> — {transaction.date}<br />
     {transaction.category} • {transaction.description}
   </div>
+  
 
   <div style={{ textAlign: "right" }}>
     <strong>€{transaction.amount.toFixed(2)}</strong>
