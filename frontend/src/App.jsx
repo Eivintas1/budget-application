@@ -178,10 +178,31 @@ const expenseByCategory = transactions
 
     <h2>Transactions</h2>
     <div style={{ display: "flex", gap: 8, margin: "12px 0" }}>
-  <button type="button" onClick={() => setFilterType("All")}>All</button>
-  <button type="button" onClick={() => setFilterType("Income")}>Income</button>
-  <button type="button" onClick={() => setFilterType("Expense")}>Expense</button>
+  <button
+    type="button"
+    onClick={() => setFilterType("All")}
+    style={{ fontWeight: filterType === "All" ? "bold" : "normal" }}
+  >
+    All
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setFilterType("Income")}
+    style={{ fontWeight: filterType === "Income" ? "bold" : "normal" }}
+  >
+    Income
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setFilterType("Expense")}
+    style={{ fontWeight: filterType === "Expense" ? "bold" : "normal" }}
+  >
+    Expense
+  </button>
 </div>
+
 
     {transactions.length === 0 ? (
       <p>No transactions found</p>
