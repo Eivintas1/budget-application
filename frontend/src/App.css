@@ -1,149 +1,264 @@
-:root {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: #f6f7fb;
-  color: #111;
+/* App.css */
+
+/* --------- Base / Reset --------- */
+:root{
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e6e8f0;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  --primary: #6d6af8;
+  --primaryDark: #5b57f1;
 }
 
-.container {
-  max-width: 900px;
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body{
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* --------- Page Container --------- */
+.container{
+  width: min(1100px, calc(100% - 48px));
   margin: 40px auto;
-  padding: 0 16px;
 }
 
-.card {
-  background: white;
-  border: 1px solid #e6e6ee;
-  border-radius: 14px;
-  padding: 18px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-}
-
-.header {
+/* --------- Top Nav --------- */
+.nav{
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   margin-bottom: 14px;
 }
 
-.title {
-  font-size: 28px;
-  font-weight: 800;
-  margin: 0;
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.totals {
+.logoDot{
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.title{
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.subtitle{
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* --------- Totals Pills --------- */
+.totals{
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 12px 0 0;
-  font-weight: 600;
+  margin: 14px 0 18px;
 }
 
-.pill {
-  background: #f2f3f8;
-  border: 1px solid #e4e6f2;
+.pill{
+  background: rgba(109, 106, 248, 0.08);
+  border: 1px solid rgba(109, 106, 248, 0.18);
+  padding: 10px 14px;
   border-radius: 999px;
-  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 14px;
 }
 
-.grid {
+/* --------- Main Layout --------- */
+.layout{
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+/* Stack on smaller screens */
+@media (max-width: 900px){
+  .layout{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------- Cards --------- */
+.card{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.sectionTitle{
+  margin: 0 0 12px;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+
+/* --------- Form Grid --------- */
+.grid{
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 12px;
 }
 
 .grid input,
-.grid select {
+.grid select{
+  width: 100%;
   padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #d9d9e6;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
   outline: none;
-  background: white;
+  font-size: 14px;
 }
 
 .grid input:focus,
-.grid select:focus {
-  border-color: #6b6bf3;
-  box-shadow: 0 0 0 3px rgba(107, 107, 243, 0.15);
+.grid select:focus{
+  border-color: rgba(109, 106, 248, 0.6);
+  box-shadow: 0 0 0 4px rgba(109, 106, 248, 0.15);
 }
 
-.actions {
+.grid input::placeholder{
+  color: #94a3b8;
+}
+
+/* Make the Amount field span full width (looks better) */
+.grid input[placeholder="Amount"]{
+  grid-column: 1 / -1;
+}
+
+/* On narrow screens make form fields single column */
+@media (max-width: 520px){
+  .grid{ grid-template-columns: 1fr; }
+  .grid input[placeholder="Amount"]{ grid-column: auto; }
+}
+
+/* --------- Buttons --------- */
+.actions{
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
+  justify-content: flex-end;
+  margin-top: 12px;
 }
 
-button {
-  border: 1px solid #d9d9e6;
-  background: white;
-  padding: 10px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-button:hover {
-  background: #f2f3f8;
-}
-
-button.primary {
-  background: #6b6bf3;
-  border-color: #6b6bf3;
+.primary{
+  border: none;
+  background: var(--primary);
   color: white;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(109, 106, 248, 0.25);
 }
 
-button.primary:hover {
-  background: #5a5ae6;
+.primary:hover{ background: var(--primaryDark); }
+.primary:active{ transform: translateY(1px); }
+
+/* --------- Transactions Header + Filters --------- */
+.txHeader{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-.filterRow {
+.filterRow{
   display: flex;
   gap: 8px;
-  margin: 14px 0;
+  flex-wrap: wrap;
 }
 
-.list {
+.pillBtn{
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.pillBtn.active{
+  border-color: rgba(109, 106, 248, 0.35);
+  background: rgba(109, 106, 248, 0.12);
+}
+
+/* --------- Lists --------- */
+.list{
   list-style: none;
   padding: 0;
-  margin: 14px 0 0;
+  margin: 0;
   display: grid;
   gap: 10px;
 }
 
-.tx {
+.tx{
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid #ececf5;
+  gap: 12px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
   background: #fff;
 }
 
-.tx.income {
-  border-left: 6px solid #2fbf71;
-}
-
-.tx.expense {
-  border-left: 6px solid #ff4d4f;
-}
-
-.txMeta {
-  color: #555;
-  font-size: 14px;
+.txMeta{
   margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
 }
 
-.amount {
-  font-size: 16px;
+.amount{
   font-weight: 800;
   text-align: right;
 }
 
-.smallBtn {
+.tx.income{
+  border-left: 5px solid rgba(34, 197, 94, 0.6);
+}
+
+.tx.expense{
+  border-left: 5px solid rgba(239, 68, 68, 0.6);
+}
+
+.smallBtn{
   margin-top: 8px;
+  width: 100%;
+  border: 1px solid var(--border);
+  background: #fff;
   padding: 8px 10px;
   border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.smallBtn:hover{
+  background: #f8fafc;
+}
+
+/* --------- Empty State --------- */
+.empty{
+  border: 1px dashed rgba(100, 116, 139, 0.35);
+  background: rgba(100, 116, 139, 0.06);
+  color: var(--muted);
+  padding: 14px;
+  border-radius: 14px;
 }
