@@ -138,7 +138,7 @@ export default function App() {
 
           <div className="grid">
             <input
-              placeholder="Date (YYYY-MM-DD)"
+              type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
             />
@@ -161,6 +161,8 @@ export default function App() {
             />
 
             <input
+              type="number"
+              step="0.01"
               placeholder="Amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
